@@ -102,7 +102,7 @@ for scan=1:n_scans
     end
     
     scan_base_name=regexprep(file_names(scan).name,'\.nii(\.gz)?$','');
-    saveas(gcf,[general_path '/Anatomical_MRI_Images/' scan_base_name '.jpeg']);
+    print(gcf,[general_path '/Anatomical_MRI_Images/' scan_base_name '.jpeg'],'-djpeg','-r600');
 end
 
 
