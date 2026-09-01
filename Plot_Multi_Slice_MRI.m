@@ -1,4 +1,4 @@
-%function Anatomical_MRI
+%function Plot_Multi_Slice_MRI
 
 %%%%%
 %

@@ -8,7 +8,7 @@ MATLAB scripts to plot slices from anatomical MRI volumes (NIfTI, `.nii`/`.nii.g
 
 ## Scripts
 
-### `Anatomical_MRI.m`
+### `Plot_Multi_Slice_MRI.m`
 
 Plots a montage of evenly-spaced slices, in one chosen anatomical plane, for every scan
 matching `scan_name` found under `general_path`. Saves one JPEG per scan at 600 DPI.
@@ -36,7 +36,7 @@ Edit the variables at the top before running:
 - `general_path`, `scan_name`, `colormap_name` — same as above.
 - `plane_name` — `'sag'`, `'cor'` or `'ax'`.
 - `slice_number` — original voxel index along that axis (matches the numbers shown by
-  `Anatomical_MRI.m`).
+  `Plot_Multi_Slice_MRI.m`).
 
 ### Helper functions
 
