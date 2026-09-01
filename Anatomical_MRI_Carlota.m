@@ -24,8 +24,9 @@ n_rows=4;
 n_collumns=8;
 
 
-% Choose plane to plot  
+% Choose plane to plot
 Choose_plane=1; % %1--> sag,2--> cor, 3--> ax
+plane_names={'sag','cor','ax'};
 
 %%
 n_scans=length(file_names);
@@ -62,7 +63,8 @@ for scan=1:n_scans
     end
     
     scan_base_name=regexprep(file_names(scan).name,'\.nii(\.gz)?$','');
-    print(gcf,[general_path '/Anatomical_MRI_Images/' scan_base_name '.jpeg'],'-djpeg','-r600');
+    output_name=[scan_base_name '_' plane_names{Choose_plane} '.jpeg'];
+    print(gcf,[general_path '/Anatomical_MRI_Images/' output_name],'-djpeg','-r600');
 end
 
 
