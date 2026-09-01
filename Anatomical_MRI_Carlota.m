@@ -58,46 +58,41 @@ for scan=1:n_scans
         end
     end
 
-    [X_size, Y_size, Z_size]=size(MRI_signal);
-
-    % Resample to isotropic voxels using the real voxel spacing (mm),
-    % so slice counts reflect true anatomy instead of raw, possibly
-    % anisotropic, voxel counts per axis
-    iso_voxel_size=min(voxel_size);
-    iso_size=round([X_size, Y_size, Z_size].*voxel_size/iso_voxel_size);
-
-    MRI_signal=imresize3(MRI_signal,iso_size,'Method','linear');
-
-    % Pad (not stretch) to a cube so every orientation has the same
-    % number of slices to plot, without distorting the anatomy
-    max_resolution=max(iso_size);
-    pad_before=floor((max_resolution-iso_size)/2);
-    pad_after=(max_resolution-iso_size)-pad_before;
-    MRI_signal=padarray(MRI_signal,pad_before,0,'pre');
-    MRI_signal=padarray(MRI_signal,pad_after,0,'post');
-
-    n_slices=max_resolution;
+    % Slice numbers stay the original (aligned but un-resampled) voxel
+    % indices for this plane; only the extracted 2D image is resized,
+    % to correct in-plane anisotropy for display
+    n_slices=size(MRI_signal,Choose_plane);
+    other_dims=setdiff([1 2 3],Choose_plane);
+    target_pixel_size=min(voxel_size(other_dims));
 
     slices=1:ceil(n_slices/n_collumns/n_rows):n_slices;
-    
+
     for s=1:length(slices)
-        
+
         subplot_tight(n_rows,n_collumns,s,0.001)
-        
+
         if Choose_plane==1
-        
-        imagesc(squeeze(MRI_signal(slices(s),:,:))',[0 Image_thres]);
+
+        slice_img=squeeze(MRI_signal(slices(s),:,:))';
         elseif Choose_plane==2
-        imagesc(squeeze(MRI_signal(:,slices(s),:))',[0 Image_thres]);
+        slice_img=squeeze(MRI_signal(:,slices(s),:))';
         elseif Choose_plane==3
-            imagesc(squeeze(MRI_signal(:,:,slices(s)))',[0 Image_thres]);
+            slice_img=squeeze(MRI_signal(:,:,slices(s)))';
         end
+
+        % slice_img rows follow other_dims(2), columns follow other_dims(1)
+        row_pixel_size=voxel_size(other_dims(2));
+        col_pixel_size=voxel_size(other_dims(1));
+        new_img_size=round(size(slice_img).*[row_pixel_size col_pixel_size]/target_pixel_size);
+        slice_img=imresize(slice_img,new_img_size,'bilinear');
+
+        imagesc(slice_img,[0 Image_thres]);
 
         axis image
         %axis equal
         axis xy
         axis off
-        
+
         title(['s=' num2str(slices(s))],'color','w')
     end
     
