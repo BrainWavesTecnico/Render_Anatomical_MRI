@@ -12,6 +12,10 @@ scan_name='t1_mprage';   % substring identifying the scan file
 plane_name='sag';        % 'sag', 'cor' or 'ax'
 slice_number=100;        % original voxel index along that axis
 
+% Colormap: set the name here instead of using the Colormap Editor
+% (e.g. 'jet','parula','hot','gray','turbo','bone','copper')
+colormap_name='jet';
+
 %%
 plane_names={'sag','cor','ax'};
 plane=find(strcmpi(plane_name,plane_names));
@@ -40,7 +44,7 @@ Image_thres=mean(single(MRI_signal(:)))+3*std(single(MRI_signal(:)));
 slice_img=Extract_Anatomical_Slice(MRI_signal, voxel_size, plane, slice_number);
 
 figure('Color','k','Name',file_names.name)
-colormap(jet)
+colormap(colormap_name)
 imagesc(slice_img,[0 Image_thres]);
 axis image
 axis xy

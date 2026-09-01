@@ -28,6 +28,10 @@ n_collumns=8;
 Choose_plane=1; % %1--> sag,2--> cor, 3--> ax
 plane_names={'sag','cor','ax'};
 
+% Colormap: set the name here instead of using the Colormap Editor
+% (e.g. 'jet','parula','hot','gray','turbo','bone','copper')
+colormap_name='jet';
+
 %%
 n_scans=length(file_names);
 
@@ -38,7 +42,7 @@ for scan=1:n_scans
     Image_thres=mean(single(MRI_signal(:)))+3*std(single(MRI_signal(:)));
 
     figure('Color','k','Name',file_names(scan).name)
-    colormap(jet)
+    colormap(colormap_name)
 
     % Slice numbers stay the original (aligned but un-resampled) voxel
     % indices for this plane; only the extracted 2D image is resized,
