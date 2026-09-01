@@ -63,7 +63,13 @@ for scan=1:n_scans
         axis xy
         axis off
 
-        title(['s=' num2str(slices(s))],'color','w')
+        % Anchor the label to the image's own data coordinates (not the
+        % axes box), so it stays on the image even when axis image
+        % letterboxes it within the subplot_tight cell
+        ax_lims=axis;
+        text(ax_lims(1)+0.03*(ax_lims(2)-ax_lims(1)), ax_lims(4)-0.05*(ax_lims(4)-ax_lims(3)), ...
+            ['s=' num2str(slices(s))], 'Color','w', 'FontSize',8, ...
+            'HorizontalAlignment','left', 'VerticalAlignment','top');
     end
     
     scan_base_name=regexprep(file_names(scan).name,'\.nii(\.gz)?$','');
