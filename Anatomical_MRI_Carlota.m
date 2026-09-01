@@ -40,8 +40,25 @@ for scan=1:n_scans
     figure('Color','k','Name',file_names(scan).name)
     colormap(jet)
 
+    % Align to a canonical axis order (dim1=sag/L-R, dim2=cor/A-P,
+    % dim3=ax/S-I) using the header's affine transform, so array
+    % dimensions map to the same anatomical direction for every file
+    % regardless of how each scan (e.g. axial T2 vs sagittal T1) was
+    % originally acquired/stored
+    R=nii_info.Transform.T(1:3,1:3);
+    [~, voxel_axis_for_world]=max(abs(R),[],1);
+    world_axis_sign=sign(R(sub2ind(size(R), voxel_axis_for_world, 1:3)));
+
+    MRI_signal=permute(MRI_signal, voxel_axis_for_world);
+    voxel_size=nii_info.PixelDimensions(voxel_axis_for_world);
+
+    for d=1:3
+        if world_axis_sign(d)<0
+            MRI_signal=flip(MRI_signal,d);
+        end
+    end
+
     [X_size, Y_size, Z_size]=size(MRI_signal);
-    voxel_size=nii_info.PixelDimensions(1:3);
 
     % Resample to isotropic voxels using the real voxel spacing (mm),
     % so slice counts reflect true anatomy instead of raw, possibly
