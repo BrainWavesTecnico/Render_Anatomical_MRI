@@ -101,7 +101,8 @@ for scan=1:n_scans
         title(['s=' num2str(slices(s))],'color','w')
     end
     
-    saveas(gcf,[general_path '/Anatomical_MRI_Images/' file_names(scan).name '.jpeg']);
+    scan_base_name=regexprep(file_names(scan).name,'\.nii(\.gz)?$','');
+    saveas(gcf,[general_path '/Anatomical_MRI_Images/' scan_base_name '.jpeg']);
 end
 
 
